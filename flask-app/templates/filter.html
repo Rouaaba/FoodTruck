@@ -17,33 +17,34 @@
     .search-input {
         flex: 1;
         padding: 1rem 1.5rem;
-        background: #2a2a2a;
-        border: 2px solid #444;
+        background: #ffffff; /* Clean white input */
+        border: 2px solid #6c6c6c;
         border-radius: 10px;
-        color: #aaa;
+        color: #2c3e50;
         font-size: 1rem;
         font-family: 'Titillium Web', sans-serif;
     }
 
     .search-input:focus {
         outline: none;
-        border-color: #fded39;
+        border-color: #395dfd; /* Your signature Blue */
     }
 
     .search-btn {
-        background: #fded39;
-        color: #1a1a1a;
+        background: #395dfd; /* Primary Blue */
+        color: white;
         padding: 1rem 2rem;
         border: none;
         border-radius: 10px;
         font-weight: 700;
         text-transform: uppercase;
         cursor: pointer;
-        transition: transform 0.2s;
+        transition: all 0.3s ease;
     }
 
     .search-btn:hover {
-        transform: translateY(-2px);
+        background: #00d4ff; /* Cyan hover */
+        box-shadow: 0 4px 12px rgba(57, 93, 253, 0.3);
     }
 
     .cuisine-tags {
@@ -55,29 +56,36 @@
     }
 
     .cuisine-tag {
-        background: #2a2a2a;
-        border: 1px solid #fded39;
+        background: #ffffff;
+        border: 1px solid #6c6c6c; 
         padding: 0.5rem 1rem;
         border-radius: 20px;
-        color: #fded39;
+        color: #6c6c6c; 
         text-decoration: none;
         transition: all 0.2s;
         font-size: 0.9rem;
+        font-weight: 600;
     }
 
     .cuisine-tag:hover {
-        background: #fded39;
-        color: #1a1a1a;
+        border-color: #395dfd;
+        color: #395dfd;
         transform: translateY(-2px);
     }
 
     .results-header {
-        background: #2a2a2a;
-        border: 1px solid #fded39;
+        background: #6c6c6c; /* Your Base Grey */
         border-radius: 10px;
         padding: 1.5rem;
         margin: 2rem 0;
         text-align: center;
+    }
+
+    .results-header h2 {
+        color: white !important; /* White text on grey background */
+        margin: 0;
+        border: none !important; /* Remove the border-left from base.html */
+        padding: 0 !important;
     }
 
     .truck-list {
@@ -87,37 +95,39 @@
     }
 
     .truck-card {
-        background: #2a2a2a;
-        border: 1px solid #444;
+        background: #6c6c6c; /* Your Base Grey */
+        border: 1px solid transparent;
         border-radius: 10px;
         padding: 2rem;
-        transition: border-color 0.3s;
+        transition: all 0.3s;
     }
 
     .truck-card:hover {
-        border-color: #fded39;
+        border-color: #00d4ff;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.1);
     }
 
     .truck-card h3 {
-        color: #fded39;
+        color: #00d4ff !important; /* Electric Cyan headings on the grey card */
         margin-bottom: 1rem;
         font-size: 1.5rem;
     }
 
-    .locations-list {
-        margin-top: 1rem;
-        padding-left: 1rem;
-    }
-
     .location-item {
-        background: #1a1a1a;
-        border-left: 3px solid #fded39;
+        background: rgba(255, 255, 255, 0.1); /* Subtle highlight on the grey */
+        border-left: 3px solid #00d4ff;
         padding: 1rem;
         margin-bottom: 1rem;
+        border-radius: 0 5px 5px 0;
     }
 
-    .location-item:last-child {
-        margin-bottom: 0;
+    /* Target labels and plain text within the grey card */
+    .truck-card strong {
+        color: #ffffff;
+    }
+    
+    .truck-card p, .truck-card span {
+        color: #eeeeee;
     }
 </style>
 {% endblock %}
@@ -138,7 +148,7 @@
                     value="{{ data.cuisine if data.cuisine else '' }}"
                     required
                 >
-                <button type="submit" class="search-btn">🔍 Search</button>
+                <button type="submit" class="search-btn">Search</button>
             </form>
         </div>
 
@@ -154,13 +164,13 @@
         </div>
 
         {% if error %}
-            <div style="background: #2a2a2a; border: 2px solid #ef4444; border-radius: 10px; padding: 2rem; text-align: center; margin-top: 2rem;">
-                <h2 style="color: #ef4444;">⚠️ Error</h2>
-                <p style="color: #aaa;">{{ data.msg }}</p>
+            <div style="background: #ffffff; border: 2px solid #ef4444; border-radius: 10px; padding: 2rem; text-align: center; margin-top: 2rem;">
+                <h2 style="color: #ef4444 !important; border: none;">⚠️ Error</h2>
+                <p style="color: #2c3e50;">{{ data.msg }}</p>
             </div>
         {% elif data.trucks %}
             <div class="results-header">
-                <h2 style="color: #fded39; margin: 0;">Found {{ data.count }} truck{{ 's' if data.count != 1 else '' }} serving "{{ data.cuisine }}"</h2>
+                <h2>Found {{ data.count }} truck{{ 's' if data.count != 1 else '' }} serving "{{ data.cuisine }}"</h2>
             </div>
 
             <div class="truck-list">
@@ -169,21 +179,21 @@
                         <h3>🚚 {{ truck.name }}</h3>
                         
                         <div style="margin-bottom: 1rem;">
-                            <strong style="color: #aaa;">Menu Items:</strong>
+                            <strong>Menu Items:</strong>
                             <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem;">
                                 {% for item in truck.fooditems %}
-                                    <span style="background: #1a1a1a; border: 1px solid #fded39; padding: 0.25rem 0.75rem; border-radius: 15px; color: #fded39; font-size: 0.85rem;">{{ item }}</span>
+                                    <span style="background: rgba(0, 212, 255, 0.1); border: 1px solid #00d4ff; padding: 0.25rem 0.75rem; border-radius: 15px; color: #00d4ff; font-size: 0.85rem;">{{ item }}</span>
                                 {% endfor %}
                             </div>
                         </div>
 
                         <div>
-                            <strong style="color: #aaa;">Locations ({{ truck.branches|length }}):</strong>
-                            <div class="locations-list">
+                            <strong>Locations ({{ truck.branches|length }}):</strong>
+                            <div class="locations-list" style="margin-top: 1rem;">
                                 {% for branch in truck.branches %}
                                     <div class="location-item">
-                                        <div style="color: #fded39; font-weight: 600; margin-bottom: 0.5rem;">📍 {{ branch.address }}</div>
-                                        <div style="color: #aaa; font-size: 0.9rem;">🕐 {{ branch.hours }}</div>
+                                        <div style="color: #00d4ff; font-weight: 600; margin-bottom: 0.25rem;">📍 {{ branch.address }}</div>
+                                        <div style="color: #ddd; font-size: 0.9rem;">🕐 {{ branch.hours }}</div>
                                     </div>
                                 {% endfor %}
                             </div>

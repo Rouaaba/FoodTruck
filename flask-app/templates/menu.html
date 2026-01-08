@@ -5,32 +5,36 @@
 {% block extra_css %}
 <style>
     :root {
-        --accent-color: #fded39;
-        --card-bg: rgba(42, 42, 42, 0.6);
-        --text-muted: #aaa;
+        /* Matching the palette: Blue accents and Grey cards */
+        --accent-blue: #395dfd;    
+        --accent-cyan: #00d4ff;
+        --card-bg: #6c6c6c;         /* Your anchor grey */
+        --text-white: #ffffff;
+        --text-muted: #eeeeee;
     }
 
     .page-content {
+        /* Removed dark gradient, using beige to match base.html */
         padding: 40px 20px;
-        background: radial-gradient(circle at top left, #1a1a1a, #000);
         min-height: 100vh;
     }
 
     .content-card {
+        /* This inherits the light background from base.html */
         max-width: 1000px;
         margin: 0 auto;
     }
 
     h1 {
-        font-size: 2.5rem;
-        color: white;
+        /* h1 color is handled by base.html (Blue), 
+           but we'll ensure it's centered here */
         text-align: center;
         margin-bottom: 0.5rem;
     }
 
     .subtitle {
         text-align: center;
-        color: var(--text-muted);
+        color: #4a5568; /* Navy-Grey for light background */
         margin-bottom: 3rem;
     }
 
@@ -41,60 +45,61 @@
         gap: 25px;
     }
 
-    /* Modern Card Design */
+    /* Modern Card Design - Grey Background */
     .menu-item {
         background: var(--card-bg);
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        border: 1px solid transparent;
         border-radius: 16px;
         padding: 25px;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         position: relative;
         overflow: hidden;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
     }
 
     .menu-item:hover {
         transform: translateY(-8px);
-        border-color: var(--accent-color);
-        box-shadow: 0 10px 30px rgba(253, 237, 57, 0.1);
+        border-color: var(--accent-cyan);
+        box-shadow: 0 10px 30px rgba(0, 212, 255, 0.2);
     }
 
     .menu-item h3 {
-        color: white;
+        color: var(--text-white);
         margin: 0 0 10px 0;
         font-size: 1.4rem;
         letter-spacing: 0.5px;
     }
 
     .popularity {
-        color: var(--accent-color);
+        color: var(--accent-cyan); /* Cyan for visibility on grey */
         font-size: 0.85rem;
-        font-weight: 600;
+        font-weight: 700;
         text-transform: uppercase;
         margin-bottom: 15px;
         display: block;
+        letter-spacing: 1px;
     }
 
-    /* Refined Popularity Bar */
+    /* Refined Popularity Bar - Blue to Cyan Gradient */
     .popularity-bar {
-        height: 4px;
-        background: rgba(255, 255, 255, 0.1);
+        height: 6px;
+        background: rgba(0, 0, 0, 0.2);
         border-radius: 10px;
-        margin-top: 15px;
+        margin-top: 20px;
     }
 
     .popularity-fill {
         height: 100%;
-        background: linear-gradient(90deg, #fded39, #f7ab05);
+        background: linear-gradient(90deg, var(--accent-blue), var(--accent-cyan));
         border-radius: 10px;
-        box-shadow: 0 0 10px rgba(253, 237, 57, 0.5);
+        box-shadow: 0 0 12px rgba(0, 212, 255, 0.4);
     }
 
     .error-message {
-        background: rgba(220, 53, 69, 0.1);
-        border: 1px solid #dc3545;
-        color: #ff8791;
-        padding: 20px;
+        background: #fff;
+        border: 2px solid #ef4444;
+        color: #ef4444;
+        padding: 25px;
         border-radius: 12px;
         text-align: center;
     }
@@ -122,7 +127,7 @@
                 <div class="menu-item">
                     <span class="popularity">🔥 High Demand</span>
                     <h3>{{ item.name }}</h3>
-                    <p style="color: var(--text-muted); font-size: 0.9rem;">
+                    <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 0;">
                         Found at {{ item.trucks }} truck{{ 's' if item.trucks != 1 else '' }}
                     </p>
                     

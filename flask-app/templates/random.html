@@ -10,9 +10,10 @@
         margin: 0 auto;
     }
 
+    /* Button updated to Blue/Cyan Gradient */
     .lucky-btn {
-        background: #fded39;
-        color: #1a1a1a;
+        background: linear-gradient(90deg, #395dfd 0%, #00d4ff 100%);
+        color: white;
         padding: 1.5rem 3rem;
         border: none;
         border-radius: 15px;
@@ -20,40 +21,46 @@
         font-weight: 700;
         text-transform: uppercase;
         cursor: pointer;
-        transition: all 0.3s ease;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         margin: 2rem 0;
-        box-shadow: 0 5px 20px rgba(253, 237, 57, 0.3);
+        box-shadow: 0 5px 20px rgba(57, 93, 253, 0.3);
     }
 
     .lucky-btn:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 8px 30px rgba(253, 237, 57, 0.5);
+        transform: translateY(-5px) scale(1.02);
+        box-shadow: 0 10px 30px rgba(0, 212, 255, 0.4);
     }
 
+    /* Main Display updated to #6c6c6c Grey */
     .truck-display {
-        background: #2a2a2a;
-        border: 2px solid #fded39;
+        background: #6c6c6c;
+        border: 2px solid #00d4ff; /* Cyan accent border */
         border-radius: 20px;
-        padding: 3rem;
+        padding: 3.5rem 2rem;
         margin-top: 2rem;
-        animation: fadeIn 0.5s ease;
+        animation: fadeIn 0.6s ease-out;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.1);
     }
 
     @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(20px); }
+        from { opacity: 0; transform: translateY(30px); }
         to { opacity: 1; transform: translateY(0); }
     }
 
     .truck-name {
         font-size: 2.5rem;
-        color: #fded39;
+        color: #00d4ff !important; /* Electric Cyan */
         margin-bottom: 1.5rem;
         text-transform: uppercase;
+        font-weight: 700;
+        border: none !important; /* Removing base.html h2 style */
+        padding: 0 !important;
     }
 
     .truck-icon {
         font-size: 5rem;
         margin-bottom: 1rem;
+        filter: drop-shadow(0 5px 15px rgba(0,0,0,0.2));
     }
 
     .food-items {
@@ -61,32 +68,32 @@
         flex-wrap: wrap;
         gap: 0.75rem;
         justify-content: center;
-        margin: 2rem 0;
+        margin: 2.5rem 0;
     }
 
     .food-tag {
-        background: #1a1a1a;
-        border: 1px solid #fded39;
-        padding: 0.5rem 1rem;
-        border-radius: 20px;
-        color: #fded39;
-        font-size: 0.9rem;
-        text-transform: capitalize;
+        background: rgba(0, 212, 255, 0.1);
+        border: 1px solid #00d4ff;
+        padding: 0.6rem 1.2rem;
+        border-radius: 25px;
+        color: #00d4ff;
+        font-size: 0.95rem;
+        font-weight: 600;
     }
 
     .detail-section {
-        background: #1a1a1a;
-        border: 1px solid #444;
-        border-radius: 10px;
-        padding: 1.5rem;
+        background: rgba(255, 255, 255, 0.05); /* Soft highlight */
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        padding: 2rem;
         margin-top: 2rem;
         text-align: left;
     }
 
     .detail-row {
         display: flex;
-        gap: 1rem;
-        margin-bottom: 1rem;
+        gap: 1.2rem;
+        margin-bottom: 1.5rem;
         align-items: flex-start;
     }
 
@@ -104,15 +111,18 @@
     }
 
     .detail-label {
-        color: #aaa;
-        font-size: 0.85rem;
+        color: #eeeeee; /* Off-white label */
+        font-size: 0.8rem;
         text-transform: uppercase;
+        letter-spacing: 1px;
         margin-bottom: 0.25rem;
+        font-weight: 700;
     }
 
     .detail-value {
-        color: #fded39;
-        font-weight: 600;
+        color: #ffffff; /* Pure white value */
+        font-weight: 500;
+        line-height: 1.5;
     }
 </style>
 {% endblock %}
@@ -125,13 +135,13 @@
             <p>Can't decide what to eat? Let us pick a random food truck for you!</p>
 
             <button class="lucky-btn" onclick="location.reload()">
-                🎰 Get Random Truck
+                🎰 Roll for Lunch
             </button>
 
             {% if error %}
-                <div style="background: #2a2a2a; border: 2px solid #ef4444; border-radius: 10px; padding: 2rem; margin-top: 2rem;">
-                    <h2 style="color: #ef4444;">⚠️ Error</h2>
-                    <p style="color: #aaa;">{{ data.msg }}</p>
+                <div style="background: white; border: 2px solid #ef4444; border-radius: 10px; padding: 2rem; margin-top: 2rem;">
+                    <h2 style="color: #ef4444 !important; border: none; padding: 0;">⚠️ Error</h2>
+                    <p style="color: #2c3e50;">{{ data.msg }}</p>
                 </div>
             {% elif data %}
                 <div class="truck-display">
