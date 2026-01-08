@@ -4,11 +4,6 @@ import time
 from flask import Flask, jsonify, request, render_template, make_response
 import sys
 import requests
-import logging
-
-# Configure logging at the top of your file
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
 
 es = Elasticsearch(host='es')
 
@@ -51,9 +46,6 @@ def check_and_load_index():
         print("Index not found...")
         load_data_in_es()
 
-###########
-### APP ###
-###########
 
 
 @app.route('/')
@@ -112,7 +104,7 @@ def search():
             
         location_data = source["location"]
         
-        # Check if location has lat/lon
+        
         if isinstance(location_data, dict) and "latitude" in location_data and "longitude" in location_data:
             # Convert to coordinates array [longitude, latitude] format for Mapbox
             coordinates = [
@@ -133,7 +125,7 @@ def search():
 
     results = {"trucks": []}
     for v in temp:
-        if temp[v]:  # Only add vendors that have at least one location
+        if temp[v]:
             results["trucks"].append({
                 "name": v,
                 "fooditems": format_fooditems(fooditems[v]),
@@ -169,11 +161,8 @@ def menu():
         
         food_counter = {}
         
-        # Log the number of hits received
-        logger.info(f"Found {len(res['hits']['hits'])} documents in Elasticsearch")
-
         for hit in res["hits"]["hits"]:
-            # Use .get() safely
+            
             fooditems_str = hit["_source"].get("fooditems", "")
             
             if fooditems_str:
@@ -185,8 +174,7 @@ def menu():
                         item_lower = food_item.lower()
                         food_counter[item_lower] = food_counter.get(item_lower, 0) + 1
         
-        # FIX CHECK: Ensure .items() is called with ()
-        # If you accidentally wrote 'food_counter.items', you'd get your error.
+        
         sorted_food_items = sorted(food_counter.items(), key=lambda x: x[1], reverse=True)
         top_food_items = sorted_food_items[:20]
         
@@ -202,18 +190,16 @@ def menu():
             "status": "success",
             "total_unique_items": len(food_counter),
             "showing": len(menu_items),
-            "menu_list": menu_items  # Changed from "items" to "menu_list"
+            "menu_list": menu_items
         }
-        # Check format preference
+        
         if request.args.get('format') == 'json':
             return jsonify(result)
             
         return render_template('menu.html', data=result)
         
     except Exception as e:
-        # This will log the full traceback to your console/logs
-        logger.error(f"Error in /menu route: {str(e)}", exc_info=True)
-        
+
         error_data = {
             "status": "failure",
             "msg": "Unable to retrieve menu items",
