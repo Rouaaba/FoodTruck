@@ -4,6 +4,7 @@ import time
 from flask import Flask, jsonify, request, render_template, make_response
 import sys
 import requests
+import random
 
 es = Elasticsearch(host='es')
 
@@ -90,49 +91,33 @@ def search():
             }),
             500
         )
-    
+    # filtering results
     vendors = set([x["_source"]["applicant"] for x in res["hits"]["hits"]])
     temp = {v: [] for v in vendors}
     fooditems = {v: "" for v in vendors}
-    
     for r in res["hits"]["hits"]:
-        source = r["_source"]
-        applicant = source["applicant"]
-        
-        if "location" not in source:
-            continue
-            
-        location_data = source["location"]
-        
-        
-        if isinstance(location_data, dict) and "latitude" in location_data and "longitude" in location_data:
-            # Convert to coordinates array [longitude, latitude] format for Mapbox
-            coordinates = [
-                float(location_data["longitude"]),
-                float(location_data["latitude"])
-            ]
-            
+        applicant = r["_source"]["applicant"]
+        if "location" in r["_source"]:
             truck = {
-                "hours": source.get("dayshours", "NA"),
-                "schedule": source.get("schedule", "NA"),
-                "address": source.get("address", "NA"),
-                "location": {
-                    "coordinates": coordinates
-                }
+                "hours": r["_source"].get("dayshours", "NA"),
+                "schedule": r["_source"].get("schedule", "NA"),
+                "address": r["_source"].get("address", "NA"),
+                "location": r["_source"]["location"]
             }
-            fooditems[applicant] = source["fooditems"]
+            fooditems[applicant] = r["_source"]["fooditems"]
             temp[applicant].append(truck)
+
+    waitTime = random.randint(10, 5000)/1000
+    time.sleep(waitTime)
 
     results = {"trucks": []}
     for v in temp:
-        if temp[v]:
-            results["trucks"].append({
-                "name": v,
-                "fooditems": format_fooditems(fooditems[v]),
-                "branches": temp[v],
-                "drinks": fooditems[v].find("COLD TRUCK") > -1
-            })
-    
+        results["trucks"].append({
+            "name": v,
+            "fooditems": format_fooditems(fooditems[v]),
+            "branches": temp[v],
+            "drinks": fooditems[v].find("COLD TRUCK") > -1
+        })
     hits = len(results["trucks"])
     locations = sum([len(r["branches"]) for r in results["trucks"]])
 
