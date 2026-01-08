@@ -4,7 +4,7 @@ import time
 from flask import Flask, jsonify, request, render_template, make_response
 import sys
 import requests
-import random
+import math
 
 es = Elasticsearch(host='es')
 
@@ -107,9 +107,17 @@ def search():
             fooditems[applicant] = r["_source"]["fooditems"]
             temp[applicant].append(truck)
 
-    waitTime = random.randint(10, 5000)/1000
-    time.sleep(waitTime)
+    # "Generate a utilization % for a duration of interval seconds"
+    utilization = 95
+    interval = 2
+    start_time = time.time()
+    for i in range(0,int(interval)):
+        while time.time()-start_time < utilization/100.0:
+            a = math.sqrt(64*64*64*64*64)
+        time.sleep(1-utilization/100.0)
+        start_time += 1
 
+    # building up results
     results = {"trucks": []}
     for v in temp:
         results["trucks"].append({
