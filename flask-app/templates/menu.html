@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+
+{% block title %}Popular Items - SF Food Trucks{% endblock %}
+
+{% block extra_css %}
+<style>
+    .menu-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1.5rem;
+        margin-top: 2rem;
+    }
+
+    .menu-item {
+        background: #2a2a2a;
+        border: 1px solid #444;
+        border-radius: 10px;
+        padding: 2rem;
+        transition: transform 0.3s ease, border-color 0.3s ease;
+        cursor: pointer;
+    }
+
+    .menu-item:hover {
+        transform: translateY(-5px);
+        border-color: #fded39;
+    }
+
+    .menu-item h3 {
+        color: #fded39;
+        margin-bottom: 0.5rem;
+        font-size: 1.3rem;
+    }
+
+    .menu-item .emoji {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+        display: block;
+    }
+
+    .menu-item p {
+        color: #aaa;
+        margin-bottom: 0.5rem;
+    }
+
+    .menu-item .price {
+        font-weight: bold;
+        color: #fded39;
+        font-size: 1.1rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="page-content">
+    <div class="content-card">
+        <h1>Popular Menu Items 🍽️</h1>
+        <p>Check out some of the most popular items you can find at SF food trucks!</p>
+
+        <div class="menu-grid">
+            <div class="menu-item">
+                <span class="emoji">🌮</span>
+                <h3>Street Tacos</h3>
+                <p>Authentic Mexican tacos with your choice of carne asada, al pastor, or carnitas</p>
+                <p class="price">$3-4 each</p>
+            </div>
+
+            <div class="menu-item">
+                <span class="emoji">🍔</span>
+                <h3>Gourmet Burgers</h3>
+                <p>Juicy grass-fed beef patties with artisanal toppings and house-made sauces</p>
+                <p class="price">$12-15</p>
+            </div>
+
+            <div class="menu-item">
+                <span class="emoji">🍜</span>
+                <h3>Ramen Bowls</h3>
+                <p>Rich tonkotsu or miso broth with noodles, pork belly, and soft-boiled egg</p>
+                <p class="price">$14-16</p>
+            </div>
+
+            <div class="menu-item">
+                <span class="emoji">🥙</span>
+                <h3>Falafel Wrap</h3>
+                <p>Crispy chickpea fritters with tahini, fresh veggies, and warm pita</p>
+                <p class="price">$10-12</p>
+            </div>
+
+            <div class="menu-item">
+                <span class="emoji">🍕</span>
+                <h3>Neapolitan Pizza</h3>
+                <p>Wood-fired pizza with fresh mozzarella, San Marzano tomatoes, and basil</p>
+                <p class="price">$12-18</p>
+            </div>
+
+            <div class="menu-item">
+                <span class="emoji">🍦</span>
+                <h3>Artisan Ice Cream</h3>
+                <p>Small-batch ice cream in unique flavors like lavender honey and matcha</p>
+                <p class="price">$6-8</p>
+            </div>
+
+            <div class="menu-item">
+                <span class="emoji">🥘</span>
+                <h3>Curry Bowls</h3>
+                <p>Thai or Indian curry served over jasmine rice with fresh herbs</p>
+                <p class="price">$13-15</p>
+            </div>
+
+            <div class="menu-item">
+                <span class="emoji">🌯</span>
+                <h3>Mission Burrito</h3>
+                <p>Massive San Francisco-style burrito loaded with rice, beans, and your protein</p>
+                <p class="price">$11-13</p>
+            </div>
+
+            <div class="menu-item">
+                <span class="emoji">🍱</span>
+                <h3>Poke Bowl</h3>
+                <p>Fresh ahi tuna or salmon with rice, edamame, and sesame soy dressing</p>
+                <p class="price">$14-17</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
