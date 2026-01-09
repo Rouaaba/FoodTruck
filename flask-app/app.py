@@ -213,7 +213,7 @@ def menu():
 
 @app.route('/health')
 def health():
-    """Health check endpoint - supports both HTML and JSON"""
+    """Health check endpoint - always returns JSON"""
     try:
         es.cluster.health()
         status_data = {
@@ -221,9 +221,7 @@ def health():
             "service": "SF Food Trucks API",
             "elasticsearch": "connected"
         }
-        
-        if request.args.get('format') == 'json':
-            return jsonify(status_data)
+        return jsonify(status_data), 200
 
     except:
         status_data = {
@@ -231,11 +229,7 @@ def health():
             "service": "SF Food Trucks API",
             "elasticsearch": "disconnected"
         }
-        
-        if request.args.get('format') == 'json':
-            return jsonify(status_data), 503
-            
-        return render_template('health.html', data=status_data), 503
+        return jsonify(status_data), 503
 
 @app.route('/stats')
 def stats():
