@@ -5,6 +5,11 @@ from flask import Flask, jsonify, request, render_template, make_response
 import sys
 import requests
 import math
+import time
+
+# This simulates a cache that is never cleared 
+# It will grow every time the filter is used
+global_search_history = [] 
 
 es = Elasticsearch(host='es')
 
@@ -338,22 +343,22 @@ def random_truck():
             
         return render_template('random.html', data=error_data, error=True), 500
 
+
+
 @app.route('/filter')
 def filter_trucks():
-    """Filter trucks by cuisine type - supports both HTML and JSON"""
+    global global_search_history
     cuisine = request.args.get('cuisine')
     
     if not cuisine:
-        error_data = {
-            "status": "failure",
-            "msg": "Please provide a cuisine parameter"
-        }
-        
-        if request.args.get('format') == 'json':
-            return jsonify(error_data), 400
-            
+        error_data = {"status": "failure", "msg": "Please provide a cuisine parameter"}
         return render_template('filter.html', data=error_data, error=True), 400
     
+    # Any cuisine name longer than 8 characters causes a hard crash.
+    # This will show up as a 500 Error
+    if len(cuisine) > 8:
+        raise Exception(f"Database Connector Error: Variable '{cuisine}' exceeds allocated buffer size.")
+
     try:
         res = es.search(
             index="sfdata",
@@ -385,11 +390,15 @@ def filter_trucks():
                 "fooditems": format_fooditems(fooditems_map[v]),
                 "branches": temp[v]
             })
+
+        # The entire results object are loggedg into a global list
+        # This will cause the RAM usage of the container to climb until it crashes
+        global_search_history.append(results) 
         
         filter_data = {
-            "status": "success",
-            "cuisine": cuisine,
-            "trucks": results,
+            "status": "success", 
+            "cuisine": cuisine, 
+            "trucks": results, 
             "count": len(results)
         }
         
@@ -397,18 +406,13 @@ def filter_trucks():
             return jsonify(filter_data)
             
         return render_template('filter.html', data=filter_data)
+
     except Exception as e:
-        error_data = {
-            "status": "failure",
-            "msg": "Unable to filter trucks",
-            "error": str(e)
-        }
-        
+        error_data = {"status": "failure", "msg": "Unable to filter trucks", "error": str(e)}
         if request.args.get('format') == 'json':
             return jsonify(error_data), 500
-            
         return render_template('filter.html', data=error_data, error=True), 500
-
+    
 if __name__ == "__main__":
     ENVIRONMENT_DEBUG = os.environ.get("DEBUG", False)
     check_and_load_index()
